@@ -489,3 +489,235 @@ public class SummingAndAveragingExample {
 
 These examples highlight different ways `Collectors` can be applied to aggregate, group, partition, and transform data in powerful ways, often simplifying otherwise complex operations.
 
+
+Here are more examples of using Java 8's `Collectors`, showcasing different functionalities and scenarios:
+
+### 16. **Joining Strings**
+
+Joining a list of strings into a single string with a specified delimiter.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class JoiningExample {
+    public static void main(String[] args) {
+        List<String> words = Arrays.asList("Java", "is", "fun");
+
+        String joinedString = words.stream()
+                .collect(Collectors.joining(" ")); // Join with space
+
+        System.out.println(joinedString); // Output: Java is fun
+    }
+}
+```
+
+### 17. **Collecting to a Set**
+
+Collecting elements into a `Set` to eliminate duplicates.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CollectToSetExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Alice", "Charlie", "Bob");
+
+        Set<String> uniqueNames = names.stream()
+                .collect(Collectors.toSet());
+
+        System.out.println(uniqueNames); // Output: [Alice, Bob, Charlie]
+    }
+}
+```
+
+### 18. **Counting Elements**
+
+Counting the number of elements that match a specific condition.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CountingExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        long countEvenNumbers = numbers.stream()
+                .filter(num -> num % 2 == 0)
+                .collect(Collectors.counting());
+
+        System.out.println("Count of even numbers: " + countEvenNumbers); // Output: 5
+    }
+}
+```
+
+### 19. **Partitioning with Custom Conditions**
+
+Partitioning a list based on a custom condition (e.g., checking if a number is prime).
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class PrimePartitioningExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        Map<Boolean, List<Integer>> partitionedByPrime = numbers.stream()
+                .collect(Collectors.partitioningBy(PrimePartitioningExample::isPrime));
+
+        System.out.println("Prime numbers: " + partitionedByPrime.get(true));
+        System.out.println("Non-prime numbers: " + partitionedByPrime.get(false));
+    }
+
+    private static boolean isPrime(int num) {
+        if (num <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) return false;
+        }
+        return true;
+    }
+}
+```
+
+### 20. **Finding Minimum and Maximum Values**
+
+Finding the minimum and maximum value from a collection.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class MinMaxExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(10, 3, 5, 7, 12, 8);
+
+        Optional<Integer> min = numbers.stream()
+                .collect(Collectors.minBy(Integer::compareTo));
+
+        Optional<Integer> max = numbers.stream()
+                .collect(Collectors.maxBy(Integer::compareTo));
+
+        System.out.println("Minimum: " + min.orElse(null)); // Output: 3
+        System.out.println("Maximum: " + max.orElse(null)); // Output: 12
+    }
+}
+```
+
+### 21. **Calculating Average with Custom Collectors**
+
+Calculating average using a custom collector.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class AverageExample {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        double average = numbers.stream()
+                .collect(Collectors.averagingInt(Integer::intValue));
+
+        System.out.println("Average: " + average); // Output: Average: 3.0
+    }
+}
+```
+
+### 22. **Mapping and Counting Unique Elements**
+
+Counting unique elements in a list.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class UniqueCountExample {
+    public static void main(String[] args) {
+        List<String> items = Arrays.asList("apple", "banana", "orange", "apple", "banana");
+
+        Map<String, Long> itemCount = items.stream()
+                .collect(Collectors.groupingBy(item -> item, Collectors.counting()));
+
+        System.out.println(itemCount); // Output: {orange=1, banana=2, apple=2}
+    }
+}
+```
+
+### 23. **Collecting to a TreeMap**
+
+Collecting elements into a `TreeMap` to maintain sorted order.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CollectToTreeMapExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Zara", "Mike", "Amanda", "John");
+
+        Map<String, Integer> nameLengths = names.stream()
+                .collect(Collectors.toMap(
+                        name -> name,
+                        String::length,
+                        (existing, replacement) -> existing,
+                        TreeMap::new)); // Collecting to TreeMap
+
+        System.out.println(nameLengths); // Output: {Amanda=6, John=4, Mike=4, Zara=4}
+    }
+}
+```
+
+### 24. **Flattening a List of Lists**
+
+Flattening a list of lists into a single list.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class FlatteningExample {
+    public static void main(String[] args) {
+        List<List<String>> listOfLists = Arrays.asList(
+                Arrays.asList("A", "B", "C"),
+                Arrays.asList("D", "E"),
+                Arrays.asList("F", "G", "H", "I")
+        );
+
+        List<String> flattenedList = listOfLists.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        System.out.println(flattenedList); // Output: [A, B, C, D, E, F, G, H, I]
+    }
+}
+```
+
+### 25. **Finding Duplicates in a List**
+
+Identifying duplicate elements in a list using grouping.
+
+```java
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class DuplicateFindingExample {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "Alice", "Bob", "Dave");
+
+        Map<String, Long> duplicates = names.stream()
+                .collect(Collectors.groupingBy(name -> name, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() > 1)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        System.out.println(duplicates); // Output: {Alice=2, Bob=2}
+    }
+}
+```
+
+These examples cover a variety of scenarios where `Collectors` can be utilized effectively, including grouping, counting, flattening, and custom aggregations, showcasing the powerful capabilities of Java 8's Stream API.
+
